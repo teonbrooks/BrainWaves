@@ -15,7 +15,6 @@ import { createMainChannel } from 'enchannel-zmq-backend';
 import { isNil } from 'lodash';
 import { kernelInfoRequest, executeRequest } from '@nteract/messaging';
 import { toast } from 'react-toastify';
-import { execute, awaitOkMessage } from '../utils/jupyter/pipes';
 import { getWorkspaceDir } from '../utils/filesystem/storage';
 import {
   LAUNCH_KERNEL,
@@ -29,7 +28,7 @@ import {
   CLOSE_KERNEL,
   loadTopo,
   loadERP
-} from '../actions/jupyterActions';
+} from '../actions/pyodideActions';
 import {
   imports,
   utils,
@@ -44,7 +43,7 @@ import {
   plotERP,
   plotTopoMap,
   saveEpochs
-} from '../utils/jupyter/cells';
+} from '../utils/pyodide/commands';
 import {
   EMOTIV_CHANNELS,
   EVENTS,
@@ -56,7 +55,7 @@ import {
   parseSingleQuoteJSON,
   parseKernelStatus,
   debugParseMessage
-} from '../utils/jupyter/functions';
+} from '../utils/pyodide/functions';
 
 export const GET_EPOCHS_INFO = 'GET_EPOCHS_INFO';
 export const GET_CHANNEL_INFO = 'GET_CHANNEL_INFO';
