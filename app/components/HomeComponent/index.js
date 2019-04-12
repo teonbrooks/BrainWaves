@@ -4,7 +4,7 @@ import { isNil } from 'lodash';
 import { Grid, Button, Header, Segment, Image } from 'semantic-ui-react';
 import { toast } from 'react-toastify';
 import styles from '../styles/common.css';
-import { EXPERIMENTS, SCREENS, KERNEL_STATUS } from '../../constants/constants';
+import { EXPERIMENTS, SCREENS } from '../../constants/constants';
 import faceHouseIcon from '../../assets/common/FacesHouses.png';
 import customIcon from '../../assets/common/Custom.png';
 import appLogo from '../../assets/common/app_logo.png';
@@ -27,9 +27,7 @@ const HOME_STEPS = {
 };
 
 interface Props {
-  kernelStatus: KERNEL_STATUS;
   history: Object;
-  jupyterActions: Object;
   deviceActions: Object;
   experimentActions: Object;
 }
@@ -71,9 +69,6 @@ export default class Home extends Component<Props, State> {
 
   componentDidMount() {
     this.setState({ recentWorkspaces: readWorkspaces() });
-    if (this.props.kernelStatus === KERNEL_STATUS.OFFLINE) {
-      this.props.jupyterActions.launchKernel();
-    }
   }
 
   handleStepClick(step: string) {

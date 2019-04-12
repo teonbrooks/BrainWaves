@@ -48,9 +48,6 @@ import {
 
 export const GET_EPOCHS_INFO = 'GET_EPOCHS_INFO';
 export const GET_CHANNEL_INFO = 'GET_CHANNEL_INFO';
-export const SET_KERNEL = 'SET_KERNEL';
-export const SET_KERNEL_STATUS = 'SET_KERNEL_STATUS';
-export const SET_KERNEL_INFO = 'SET_KERNEL_INFO';
 export const SET_MAIN_CHANNEL = 'SET_MAIN_CHANNEL';
 export const SET_EPOCH_INFO = 'SET_EPOCH_INFO';
 export const SET_CHANNEL_INFO = 'SET_CHANNEL_INFO';
@@ -68,21 +65,6 @@ export const RECEIVE_DISPLAY_DATA = 'RECEIVE_DISPLAY_DATA';
 const getEpochsInfo = payload => ({ payload, type: GET_EPOCHS_INFO });
 
 const getChannelInfo = () => ({ type: GET_CHANNEL_INFO });
-
-const setKernel = payload => ({
-  payload,
-  type: SET_KERNEL
-});
-
-const setKernelStatus = payload => ({
-  payload,
-  type: SET_KERNEL_STATUS
-});
-
-const setKernelInfo = payload => ({
-  payload,
-  type: SET_KERNEL_INFO
-});
 
 const setMainChannel = payload => ({
   payload,
@@ -142,7 +124,7 @@ const loadEpochsEpic = (action$, state$) =>
     pluck('payload'),
     filter(filePathsArray => filePathsArray.length >= 1),
     map(filePathsArray =>
-      state$.value.jupyter.mainChannel.next(
+      state$.value.pyodide.mainChannel.next(
         executeRequest(loadCSV(filePathsArray))
       )
     ),
@@ -160,7 +142,7 @@ const loadEpochsEpic = (action$, state$) =>
       )
     ),
     map(epochEventsCommand =>
-      state$.value.jupyter.mainChannel.next(executeRequest(epochEventsCommand))
+      state$.value.pyodide.mainChannel.next(executeRequest(epochEventsCommand))
     ),
     awaitOkMessage(action$),
     map(() => getEpochsInfo(PYODIDE_VARIABLE_NAMES.RAW_EPOCHS))
@@ -171,7 +153,7 @@ const loadCleanedEpochsEpic = (action$, state$) =>
     pluck('payload'),
     filter(filePathsArray => filePathsArray.length >= 1),
     map(filePathsArray =>
-      state$.value.jupyter.mainChannel.next(
+      state$.value.pyodide.mainChannel.next(
         executeRequest(loadCleanedEpochs(filePathsArray))
       )
     ),
@@ -200,7 +182,7 @@ const cleanEpochsEpic = (action$, state$) =>
       )
     ),
     map(() =>
-      state$.value.jupyter.mainChannel.next(
+      state$.value.pyodide.mainChannel.next(
         executeRequest(
           saveEpochs(
             getWorkspaceDir(state$.value.experiment.title),
@@ -217,7 +199,7 @@ const getEpochsInfoEpic = (action$, state$) =>
   action$.ofType(GET_EPOCHS_INFO).pipe(
     pluck('payload'),
     map(variableName =>
-      state$.value.jupyter.mainChannel.next(
+      state$.value.pyodide.mainChannel.next(
         executeRequest(requestEpochsInfo(variableName))
       )
     ),
@@ -309,7 +291,7 @@ const loadERPEpic = (action$, state$) =>
       return EMOTIV_CHANNELS[0];
     }),
     map(channelIndex =>
-      state$.value.jupyter.mainChannel.next(
+      state$.value.pyodide.mainChannel.next(
         executeRequest(plotERP(channelIndex))
       )
     ),
@@ -325,19 +307,9 @@ const loadERPEpic = (action$, state$) =>
     map(setERPPlot)
   );
 
-const closeKernelEpic = (action$, state$) =>
-  action$.ofType(CLOSE_KERNEL).pipe(
-    map(() => {
-      state$.value.jupyter.kernel.spawn.kill();
-      state$.value.jupyter.mainChannel.complete();
-    }),
-    ignoreElements()
-  );
-
 export default combineEpics(
   launchEpic,
   setUpChannelEpic,
-  requestKernelInfoEpic,
   receiveChannelMessageEpic,
   loadEpochsEpic,
   loadCleanedEpochsEpic,
@@ -347,5 +319,4 @@ export default combineEpics(
   loadPSDEpic,
   loadTopoEpic,
   loadERPEpic,
-  closeKernelEpic
 );
