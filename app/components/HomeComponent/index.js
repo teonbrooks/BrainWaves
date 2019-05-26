@@ -16,10 +16,7 @@ import {
 import InputModal from '../InputModal';
 import SecondaryNavComponent from '../SecondaryNavComponent';
 import OverviewComponent from './OverviewComponent';
-import { languagePluginLoader } from "../../utils/pyodide/pyodide";
-
-// this initiates pyodide
-languagePluginLoader;
+import { languagePluginLoader } from '../../utils/pyodide/pyodide';
 
 const HOME_STEPS = {
   RECENT: 'RECENT',
@@ -30,6 +27,7 @@ interface Props {
   history: Object;
   deviceActions: Object;
   experimentActions: Object;
+  pyodideActions: Object;
 }
 
 interface State {
@@ -68,6 +66,7 @@ export default class Home extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.props.pyodideActions.launch();
     this.setState({ recentWorkspaces: readWorkspaces() });
   }
 
