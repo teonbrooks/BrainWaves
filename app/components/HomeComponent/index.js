@@ -16,7 +16,6 @@ import {
 import InputModal from '../InputModal';
 import SecondaryNavComponent from '../SecondaryNavComponent';
 import OverviewComponent from './OverviewComponent';
-import { languagePluginLoader } from '../../utils/pyodide/pyodide';
 
 const HOME_STEPS = {
   RECENT: 'RECENT',
