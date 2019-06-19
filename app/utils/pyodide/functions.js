@@ -2,14 +2,14 @@ export const parseSingleQuoteJSON = (string: string) =>
   JSON.parse(string.replace(/'/g, '"'));
 
 export const debugParseMessage = (msg: Object) => {
-  let content = "";
+  let content = '';
   switch (msg.channel) {
-    case "iopub":
+    case 'iopub':
       if (msg.content.execution_state) {
         content = JSON.stringify(msg.content);
       }
       if (msg.content.code) {
-        content = msg.content.code.slice(0, 300).concat("...");
+        content = msg.content.code.slice(0, 300).concat('...');
       }
       if (msg.content.text) {
         content = msg.content.text;
@@ -18,7 +18,7 @@ export const debugParseMessage = (msg: Object) => {
         content = Object.keys(msg.content.data);
       }
       break;
-    case "shell":
+    case 'shell':
       content = JSON.stringify(msg.content);
       break;
 
