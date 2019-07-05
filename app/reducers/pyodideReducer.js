@@ -1,23 +1,19 @@
 // @flow
 import {
-  SET_KERNEL,
-  SET_KERNEL_STATUS,
   SET_MAIN_CHANNEL,
-  SET_KERNEL_INFO,
   SET_EPOCH_INFO,
   SET_CHANNEL_INFO,
   SET_PSD_PLOT,
   SET_TOPO_PLOT,
   SET_ERP_PLOT,
-  RECEIVE_EXECUTE_RETURN
-} from '../epics/jupyterEpics';
-import { ActionType, Kernel } from '../constants/interfaces';
-import { KERNEL_STATUS } from '../constants/constants';
-import { EXPERIMENT_CLEANUP } from '../epics/experimentEpics';
+  RECEIVE_EXECUTE_RETURN,
+  SET_PYODIDE_STATUS
+} from "../epics/pyodideEpics";
+import { ActionType } from "../constants/interfaces";
+import { PYODIDE_STATUS } from "../constants/constants";
+import { EXPERIMENT_CLEANUP } from "../epics/experimentEpics";
 
-export interface JupyterStateType {
-  +kernel: ?Kernel;
-  +kernelStatus: KERNEL_STATUS;
+export interface PyodideStateType {
   +mainChannel: ?any;
   +epochsInfo: ?Array<{ [string]: number | string }>;
   +channelInfo: ?Array<string>;
@@ -27,41 +23,25 @@ export interface JupyterStateType {
 }
 
 const initialState = {
-  kernel: null,
-  kernelStatus: KERNEL_STATUS.OFFLINE,
   mainChannel: null,
   epochsInfo: null,
   channelInfo: [],
   psdPlot: null,
   topoPlot: null,
-  erpPlot: null
+  erpPlot: null,
+  status: PYODIDE_STATUS.NOT_LOADED
 };
 
-export default function jupyter(
-  state: JupyterStateType = initialState,
+export default function pyodide(
+  state: PyodideStateType = initialState,
   action: ActionType
 ) {
   switch (action.type) {
-    case SET_KERNEL:
-      return {
-        ...state,
-        kernel: action.payload
-      };
-
-    case SET_KERNEL_STATUS:
-      return {
-        ...state,
-        kernelStatus: action.payload
-      };
-
     case SET_MAIN_CHANNEL:
       return {
         ...state,
         mainChannel: action.payload
       };
-
-    case SET_KERNEL_INFO:
-      return state;
 
     case SET_EPOCH_INFO:
       return {
@@ -103,6 +83,12 @@ export default function jupyter(
 
     case RECEIVE_EXECUTE_RETURN:
       return state;
+
+    case SET_PYODIDE_STATUS:
+      return {
+        ...state,
+        status: action.payload
+      };
 
     default:
       return state;
