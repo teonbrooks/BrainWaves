@@ -22,7 +22,7 @@ export const aggregateBehaviorDataToSave = (data, removeOutliers) => {
         let accuracy = e
           .filter(row => row.condition === condition && row.correct)
           .map(row => row.correct)
-        accuracyPercent[condition] = accuracy.length ? accuracy.length / 1.5 : ss.mean(e.filter(r => r.condition === condition).map(r => r.accuracy));
+        accuracyPercent[condition] = accuracy.length ? accuracy.length / 0.75 : ss.mean(e.filter(r => r.condition === condition).map(r => r.accuracy));
       }
       return {
         subject: e.map(r => r.subject)[0],
