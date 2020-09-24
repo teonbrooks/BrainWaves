@@ -1,7 +1,7 @@
 {
   "name": "BrainWaves",
   "productName": "BrainWaves",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "EEG Desktop Application",
   "main": "./main.prod.js",
   "type": "module",
@@ -16,9 +16,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@neurosity/pipes": "^3.2.3",
     "@babel/runtime": "7.10.2",
     "@babel/runtime-corejs2": "^7.10.2",
+    "@neurosity/pipes": "^3.2.3",
     "enchannel-zmq-backend": "^9.1.22",
     "kernelspecs": "^2.0.0",
     "node-pre-gyp": "^0.15.0",
